@@ -1,0 +1,55 @@
+ipeline {
+        agent any
+        stages {
+                 stage (build) {
+			
+			                        agent {
+        docker {
+        
+            image 'maven:slim'
+            args '-v /root/.m2:/root/.m2'
+        }
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh ' ssh root@172.31.30.63 mvn -B -DskipTests clean package'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh ' ssh root@172.31.30.63 mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage('Deliver') {
+            steps {
+                sh '  ssh root@172.31.30.63 mvn -version'
+            }
+        }
+    }
+			
+			
+			
+			}
+      
+      
+      stage(dockerfile) {
+		      
+		        agent { dockerfile true }
+                      stages {
+                        stage('Test') {
+                                   steps {
+                                           sh ' ssh root@172.31.30.63 ls -l'
+					   sh '  ssh root@172.31.30.63 java -jar *.jar'
+                                        }
+                                      }
+                              }
+		   
+		         }
+      }
+      }

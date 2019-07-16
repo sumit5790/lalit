@@ -44,8 +44,9 @@ pipeline {
                       stages {
                         stage('Test') {
                                    steps {
-                                           sh 'ls -l'
-					   sh 'java -jar *.jar'
+                                           sh 'docker  build -f 35.232.226.128:8082/test_image .'
+					   sh 'docker login -u admin -p Sumit@123 35.232.226.128:8082'
+					   sh 'docker push 35.232.226.128:8082/test_image '
                                         }
                                       }
                               }

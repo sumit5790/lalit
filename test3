@@ -19,7 +19,7 @@ pipeline {
 			                        agent {
         docker {
         
-            image '35.232.226.128:8082/8-jdk-alpine:1'
+            image '8-jdk-alpine:1'
             args '-v /root/.m2:/root/.m2'
         }
     }

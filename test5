@@ -1,22 +1,12 @@
 pipeline {
         agent any
-        stages {
-                 stage ('login on register') {
-			                      steps {
-                            sh 'echo "singh">docker login  sumit@172.31.30.63:50000'
-                            }
-			                       }
-                             agent {
-            image '172.31.30.63:50000/maven'
-            args '-v /root/.m2:/root/.m2'
-        }
+        
         stages {
                  stage (build) {
 			
 			                        agent {
         docker {
-        
-            image 'maven:slim'
+            image '172.31.30.63:50000/maven'
             args '-v /root/.m2:/root/.m2'
         }
     }

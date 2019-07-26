@@ -3,7 +3,7 @@ pipeline {
         stages {
                  stage ('login on register') {
 			                      steps {
-                            sh 'docker login 172.31.9.228:5000'
+                            sh 'docker login 127.0.0.1:5000'
                             }
 			                       }
                              agent {

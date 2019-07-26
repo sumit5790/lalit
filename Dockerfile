@@ -1,4 +1,4 @@
-FROM java:8-jdk-alpine
+FROM  172.31.30.63:5000/java8
 
 WORKDIR /usr/app
 

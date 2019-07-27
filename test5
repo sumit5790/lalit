@@ -4,9 +4,9 @@ pipeline {
         stage('Back-end') {
             agent { 
     docker {
-        image 'registry.az1:5043/maven-proto'
+        image '172.31.30.63:5000/maven'
         registryUrl 'https://172.31.30.63:5000'
-        registryCredentialsId 'credentials-id'
+        registryCredentialsId 'private-docker'
         args '-v /var/jenkins_home/.m2:/root/.m2'
     }
 
@@ -18,11 +18,11 @@ pipeline {
         stage('Front-end') {
             agent {
     dockerfile {
-        filename 'Dockerfile.build'
+        filename 'Dockerfile'
         dir 'build'
         label 'docker_file'
         registryUrl 'https://172.31.30.63:5000'
-        registryCredentialsId 'credentials-id'
+        registryCredentialsId 'private-docker'
     }
 }
             steps {

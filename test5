@@ -1,62 +1,51 @@
-pipeline {
+pipeline{
         agent none
-        
-        stages {
-                 stage (build) {
+		stages {
+            stage('build'){
+			    agent any 
+				steps {
+				     sh 'docker status'
+				     }
 			
-  agent {
-        docker {
-            image '172.31.30.63:5000/maven'
-	    registryUrl 'https://172.31.30.63:5000'
-	    registryCredentialsId 'private-docker'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
-    stages {
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-		sh 'echo "singh">sumit@172.31.30.63:5000'
-		
-	       
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        
-    }
-			
-			
-			
-			}
-   			
-      stage (dockerfile1){
+		            	}
+         stage('jar'){
+		               agent{
+					     docker {
+						         label 'docker_build'
+                                image '172.31.30.63:5000/maven'
+	                            registryUrl 'https://172.31.30.63:5000'
+	                            registryCredentialsId 'private-docker'
+                                 args '-v /root/.m2:/root/.m2'
+                                 }
+					   }
+					   steps{
+					         sh 'mvn -B -DskipTests clean package'
+							 sh 'mvn test'
+							 
+					   
+					        }
+							post {
+                                 always {
+                                      junit 'target/surefire-reports/*.xml'
+                                         }
+                                  }
+		              }
+            
+         stage (dockerfile){
    
-   agent {
-    dockerfile {
-        filename 'Dockerfile'
-        dir 'build'
-        label 'docker_file'
-        registryUrl 'https://172.31.30.63:5000'
-        registryCredentialsId 'credentials-id'
+                        agent {
+                        dockerfile {
+                                   filename 'Dockerfile'
+                                   dir 'build'
+                                   label 'docker_file'
+                                   registryUrl 'https://172.31.30.63:5000'
+                                   registryCredentialsId 'credentials-id'
     }
 }
    
-   }
-      
-      
-      }
-    
-    
-      
-   
-      }
- 
+   }			
+
+			
+		}
+
+}

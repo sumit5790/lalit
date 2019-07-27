@@ -37,7 +37,14 @@ pipeline {
 			
 			
 			}
-   stage (dockerfile1){
+   			
+      
+      
+      
+      }
+    
+    stages{
+      stage (dockerfile1){
    
    agent {
     dockerfile {
@@ -49,20 +56,7 @@ pipeline {
     }
 }
    
-   }			
-      
-      
-      stage(dockerfile) {
-		      
-		        agent { dockerfile true }
-                      stages {
-                        stage('Test') {
-                                   steps {
-                                           sh 'echo "singh">sumit@172.31.30.63:5000'
-                                        }
-                                      }
-                              }
-		   
-		         }
+   }
+   }
       }
-      }
+ 

@@ -31,8 +31,12 @@ pipeline {
             }
         }
         stage('Deliver') {
-            steps {
-                sh 'mvn -version'
+            agent {
+        docker {
+            docker build -t java:2 .
+	    registryUrl 'https://172.31.30.63:5000'
+	    registryCredentialsId 'private-docker'
+            args '-v /root/.m2:/root/.m2'
             }
         }
     }

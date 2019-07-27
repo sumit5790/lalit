@@ -1,15 +1,8 @@
-pipeline{
-        agent none
-		stages {
-            stage('build'){
-			    agent any 
-				steps {
-				     sh 'service docker status'
-				     }
-			
-		            	}
-         stage('jar'){
-		               agent{
+pipeline {
+    agent none
+    stages {
+        stage('Back-end') {
+            agent{
 					     docker {
 						         
                                 image '172.31.30.63:5000/maven'
@@ -18,22 +11,12 @@ pipeline{
                                  args '-v /root/.m2:/root/.m2'
                                  }
 					   }
-					   steps{
-					         sh 'mvn -B -DskipTests clean package'
-							 sh 'mvn test'
-							 
-					   
-					        }
-							post {
-                                 always {
-                                      junit 'target/surefire-reports/*.xml'
-                                         }
-                                  }
-		              }
-            
-         stage (dockerfile){
-   
-                        agent {
+            steps {
+                sh 'mvn --version'
+            }
+        }
+        stage('Front-end') {
+            agent {
                         dockerfile {
                                    filename 'Dockerfile'
                                    dir 'build'
@@ -41,11 +24,10 @@ pipeline{
                                    registryUrl 'https://172.31.30.63:5000'
                                    registryCredentialsId 'credentials-id'
     }
+            steps {
+                sh 'node --version'
+            }
+        }
+    }
 }
-   
-   }			
-
-			
-		}
-
 }

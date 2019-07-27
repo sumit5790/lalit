@@ -20,7 +20,6 @@ pipeline {
     dockerfile {
         filename 'Dockerfile'
         dir 'build'
-        
         registryUrl 'https://172.31.30.63:5000'
         registryCredentialsId 'private-docker'
     }

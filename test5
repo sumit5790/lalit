@@ -1,51 +1,33 @@
-pipeline{
-        agent none
-		stages {
-            stage('build'){
-			    agent any 
-				steps {
-				     sh 'docker status'
-				     }
-			
-		            	}
-         stage('jar'){
-		               agent{
-					     docker {
-						         label 'docker_build'
-                                image '172.31.30.63:5000/maven'
-	                            registryUrl 'https://172.31.30.63:5000'
-	                            registryCredentialsId 'private-docker'
-                                 args '-v /root/.m2:/root/.m2'
-                                 }
-					   }
-					   steps{
-					         sh 'mvn -B -DskipTests clean package'
-							 sh 'mvn test'
-							 
-					   
-					        }
-							post {
-                                 always {
-                                      junit 'target/surefire-reports/*.xml'
-                                         }
-                                  }
-		              }
-            
-         stage (dockerfile){
-   
-                        agent {
-                        dockerfile {
-                                   filename 'Dockerfile'
-                                   dir 'build'
-                                   label 'docker_file'
-                                   registryUrl 'https://172.31.30.63:5000'
-                                   registryCredentialsId 'credentials-id'
+pipeline {
+    agent none
+    stages {
+        stage('Back-end') {
+            agent { 
+    docker {
+        image 'registry.az1:5043/maven-proto'
+        registryUrl 'https://172.31.30.63:5000'
+        registryCredentialsId 'credentials-id'
+        args '-v /var/jenkins_home/.m2:/root/.m2'
+    }
+
+}
+            steps {
+                sh 'mvn --version'
+            }
+        }
+        stage('Front-end') {
+            agent {
+    dockerfile {
+        filename 'Dockerfile.build'
+        dir 'build'
+        label 'docker_file'
+        registryUrl 'https://172.31.30.63:5000'
+        registryCredentialsId 'credentials-id'
     }
 }
-   
-   }			
-
-			
-		}
-
+            steps {
+                sh 'node --version'
+            }
+        }
+    }
 }

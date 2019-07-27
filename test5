@@ -1,32 +1,55 @@
 pipeline {
-    agent none
+        agent none
+        
+        stages {
+                 stage (build) {
+			
+  agent {
+        docker {
+            image '172.31.30.63:5000/maven'
+	    registryUrl 'https://172.31.30.63:5000'
+	    registryCredentialsId 'private-docker'
+            args '-v /root/.m2:/root/.m2'
+        }
+    }
     stages {
-        stage('Back-end') {
-            agent { 
-    docker {
-        image '172.31.30.63:5000/maven'
-        registryUrl 'https://172.31.30.63:5000'
-        registryCredentialsId 'private-docker'
-        args '-v /var/jenkins_home/.m2:/root/.m2'
-    }
-
-}
+        stage('Build') {
             steps {
-                sh 'mvn --version'
+                sh 'mvn -B -DskipTests clean package'
+		sh 'echo "singh">sumit@172.31.30.63:5000'
+		
+	       
             }
         }
-        stage('Front-end') {
-            agent {
-    dockerfile {
-        filename './Dockerfile'
-        dir 'build'
-        registryUrl 'https://172.31.30.63:5000'
-        registryCredentialsId 'private-docker'
-    }
-}
+        stage('Test') {
             steps {
-                sh 'node --version'
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
             }
         }
+        
     }
+			
+			
+			
+			}
+   			
+      stage(dockerfile) {
+		      
+		        agent { dockerfile true }
+                      stages {
+                        stage('Test') {
+                                   steps {
+                                           sh 'echo "singh">sumit@172.31.30.63:5000'
+                                        }
+                                      }
+                              }
+		   
+		         }
 }
+   
+   }

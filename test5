@@ -1,8 +1,8 @@
 pipeline {
 
      environment {
-    registryUrl 'https://172.31.30.63:5000
-    registryCredentialsId 'private-docker'
+    registry = "https://172.31.30.63:5000"
+    registryCredential = ‘private-docker’
   }
         agent any
         stages {

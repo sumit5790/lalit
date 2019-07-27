@@ -38,12 +38,6 @@ pipeline {
 			
 			}
    			
-      
-      
-      
-      }
-    
-    
       stage (dockerfile1){
    
    agent {
@@ -57,6 +51,12 @@ pipeline {
 }
    
    }
+      
+      
+      }
+    
+    
+      
    
       }
  

@@ -2,14 +2,14 @@ pipeline {
         agent any
         stages {
                  stage (build) {
-			
-			                        agent {
-        docker {
-        
-            image 'maven:slim'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+	                    agent {
+                                 docker {
+                                    image '172.31.30.63:5000/maven'
+	                            registryUrl 'https://172.31.30.63:5000'
+	                            registryCredentialsId 'private-docker'
+                                       args '-v /root/.m2:/root/.m2'
+                              }
+                     }
     stages {
         stage('Build') {
             steps {

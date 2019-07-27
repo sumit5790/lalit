@@ -1,23 +1,21 @@
 pipeline {
-        agent none
-        
+        agent any
         stages {
                  stage (build) {
 			
-  agent {
+			                        agent {
         docker {
-            image '172.31.30.63:5000/maven'
-	    registryUrl 'https://172.31.30.63:5000'
-	    registryCredentialsId 'private-docker'
-            args '-v /root/.m2:/root/.m2'
+        
+            image '172.31.30.63/maven'
+        registryUrl 'https://172.31.30.63:5000'
+        registryCredentialsId 'credentials-id'
+        args '-v /var/jenkins_home/.m2:/root/.m2'
         }
     }
-	}
     stages {
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
-		sh 'echo "singh">sumit@172.31.30.63:5000'
 		
 	       
             }
@@ -32,34 +30,29 @@ pipeline {
                 }
             }
         }
-        
+        stage('Deliver') {
+            steps {
+                sh 'mvn -version'
+            }
+        }
     }
 			
 			
 			
-			
-   			
+			}
+      
+      
       stage(dockerfile) {
 		      
 		        agent { dockerfile true }
                       stages {
                         stage('Test') {
                                    steps {
-                                           sh 'echo "singh">sumit@172.31.30.63:5000'
+                                           docker ps
                                         }
                                       }
                               }
 		   
 		         }
-}
-   
-   }
-      
-      
-      
-    
-    
-      
-   
-      
- 
+      }
+      }

@@ -1,15 +1,14 @@
 pipeline {
 
-     environment {
-    registry = "https://172.31.30.63:5000"
-    registryCredential = ‘private-docker’
-  }
+     
         agent any
         stages {
                  stage (build) {
 	                    agent {
                                  docker {
                                     image '172.31.30.63:5000/maven'
+				    registryUrl 'https://172.31.30.63:5000'
+	                            registryCredentialsId 'private-docker'
 	                            args '-v /root/.m2:/root/.m2'
                               }
                      }
@@ -42,6 +41,20 @@ pipeline {
 			
 			}
       
+      stage('Front-end') {
+            agent {
+                        dockerfile {
+                                   filename 'Dockerfile'
+                                   dir 'build'
+                                   label 'docker_file'
+                                   registryUrl 'https://172.31.30.63:5000'
+                                   registryCredentialsId 'credentials-id'
+    }
+            steps {
+                sh 'node --version'
+            }
+        }
+    }
       
       stage(dockerfile) {
 		      

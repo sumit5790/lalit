@@ -53,7 +53,7 @@ pipeline {
                       stages {
                         stage('Test') {
                                    steps {
-                                           echo "singh">docker login  sumit@172.31.30.63:5000
+                                           sh 'mvn --version'
                                         }
                                       }
                               }

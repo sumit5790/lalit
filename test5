@@ -36,7 +36,8 @@ pipeline {
         stage('Deliver') {
             steps {
                 sh 'mvn -version'
-		sh 'echo "singh">docker login  sumit@172.31.30.63:5000'
+		sh 'echo "singh" | docker login 172.31.30.63:5000 --username sumit --password-stdin'
+		
             }
         }
     }

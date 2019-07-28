@@ -49,7 +49,9 @@ pipeline {
       
       
       stage(dockerfile) {
-		      
+		       environment {
+      SAUCE_ACCESS = credentials('private-docker')
+        }
 		        agent { dockerfile true }
                       stages {
                         stage('Test') {

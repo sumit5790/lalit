@@ -6,7 +6,20 @@ pipeline{
 		}
 		
 		stages {
-        stage('Build') {
+		 stage ('build') {
+		 
+		    agent {
+				dockerfile {
+						filename 'Dockerfile.build'
+						dir 'build'
+						label 'my-defined-label'
+						registryUrl '172.31.30.63:5000'
+					registryCredentialsId 'private-docker'
+    }
+}
+		 }
+	
+        stage('test') {
             steps {
                 // Print all the environment variables.
                 sh 'printenv'
@@ -23,7 +36,7 @@ pipeline{
             }
             steps {
                 echo 'Deploying docker images'
-		sh 'docker tag 172.31.30.63:5000:$GIT_COMMIT 172.31.30.63:5000/new_image '
+		         sh 'docker tag 172.31.30.63:5000:$GIT_COMMIT 172.31.30.63:5000/new_image '
                 sh 'docker push 172.31.30.63:5000/new_image:latest'
             }
         }

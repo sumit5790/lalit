@@ -1,7 +1,8 @@
 pipeline {
         agent any
 	  environment {
-      SAUCE_ACCESS = credentials('private-docker')
+      registry = "172.31.30.63:5000"
+    registryCredential = 'private-docker'
         }
      
         

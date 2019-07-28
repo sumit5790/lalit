@@ -13,7 +13,7 @@ pipeline{
                 sh 'echo $GIT_BRANCH'
                 sh 'echo $GIT_COMMIT'
                 echo 'Install non-dev composer packages and test a symfony cache clear'
-                sh 'docker build -f Dockerfile -t 172.31.30.63:5000:$GIT_COMMIT .'
+                sh 'docker build -f ./Dockerfile -t 172.31.30.63:5000:$GIT_COMMIT .'
             }
         }
 

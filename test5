@@ -1,5 +1,8 @@
 pipeline {
-
+        
+	  environment {
+      DOCKER = credentials('private-docker')
+        }
      
         agent any
         stages {

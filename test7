@@ -1,36 +1,35 @@
-pipeline{
-         agent none
-		 stages{
-		 
-		 
-		 stage('Front-end') {
-            agent {
-                        dockerfile {
-                                   filename 'Dockerfile'
-                                   dir 'build'
-                                   label 'docker_file'
-                                   registryUrl 'https://172.31.30.63:5000'
-                                   registryCredentialsId 'credentials-id'
-    }
-	}	
-         }	
+pipeline {
+        agent none
+        stages{
 		    stage('build'){
-		             steps{
-			      sh 'docker --version'	
-			       }
-				  }
+			        agent {
+                              docker {
+							image '172.31.30.63:5000/maven'
+							label 'docker'
+								registryUrl 'https://172.31.30.63:5000'
+							registryCredentialsId 'private-docker'
+							args '-v /root/.m2:/root/.m2'
+							}
+						}   
 			
-			
-			
-			stage('skiptest'){
-			  
-			         steps{     
-					    sh 'mvn -B -DskipTests clean package'
-					 }
-			}
-			
-			
-		} 
-		 
-		 }
+				}
+				steps{
+						sh 'mvn -B -DskipTests clean package'
+						sh 'mvn test'
+				}		
+           stage('dockerbuild'){
+		
+		                       agent {
+										dockerfile {
+											filename './Dockerfile'
+											dir 'build'
+												label 'dockerfile'
+												registryUrl 'https://172.31.30.63:5000'
+											registryCredentialsId 'private-docker'
+												}
+										}
+		  }		
 
+
+		}
+		}

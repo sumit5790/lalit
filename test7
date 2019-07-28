@@ -1,44 +1,68 @@
-pipeline{
-       agent any
-	   environment {
-        SAUCE_ACCESS = credentials('private-docker')
-		
-		}
-		
-		stages {
-		 stage ('build') {
-		 
-		    agent {
-				dockerfile {
-						filename 'Dockerfile.build'
-						dir 'build'
-						label 'my-defined-label'
-						registryUrl '172.31.30.63:5000'
-					registryCredentialsId 'private-docker'
-    }
-}
-		 }
-	
-        stage('test') {
+pipeline {
+        agent any
+	  environment {
+      registry = "172.31.30.63:5000"
+    registryCredential = 'private-docker'
+        }
+     
+        
+        stages {
+                 stage (build) {
+	                    agent {
+                                 docker {
+                                    image '172.31.30.63:5000/maven'
+				    registryUrl 'https://172.31.30.63:5000'
+	                            registryCredentialsId 'private-docker'
+	                            args '-v /root/.m2:/root/.m2'
+                              }
+                     }
+    stages {
+        stage('Build') {
             steps {
-                // Print all the environment variables.
-                sh 'printenv'
-                sh 'echo $GIT_BRANCH'
-                sh 'echo $GIT_COMMIT'
-                echo 'Install non-dev composer packages and test a symfony cache clear'
-                sh 'docker build -f $(pwd)/Dockerfile -t 172.31.30.63:5000/image .'
+                sh 'mvn -B -DskipTests clean package'
+		
+	       
             }
         }
-
-		stage('Push') {
-            when {
-                branch 'master'
-            }
+        stage('Test') {
             steps {
-                echo 'Deploying docker images'
-		         sh 'docker tag 172.31.30.63:5000:$GIT_COMMIT 172.31.30.63:5000/new_image '
-                sh 'docker push 172.31.30.63:5000/new_image:latest'
+                sh 'mvn test'
+		sh 'docker pull 172.31.30.63:5000/java8 '
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage('Deliver') {
+            steps {
+                sh 'mvn -version'
+		sh 'echo "singh" > docker login  sumit@172.31.30.63:5000 '
+		
             }
         }
     }
-}
+			
+			
+			
+			}
+      
+      
+     stage(dockerfile) {
+		       environment {
+      registry = "172.31.30.63:5000"
+    registryCredential = 'private-docker'
+        }
+		        agent { dockerfile true }
+                      stages {
+                        stage('Test') {
+                                   steps {
+                                           sh 'mvn --version'
+                                        }
+                                      }
+                              }
+		   
+		         }
+      }
+      }

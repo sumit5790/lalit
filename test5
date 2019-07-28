@@ -50,10 +50,7 @@ pipeline {
       
       
       stage(dockerfile) {
-		       environment {
-      registry = "172.31.30.63:5000"
-    registryCredential = 'private-docker'
-        }
+		       
 		        agent { dockerfile true }
                       stages {
                         stage('Test') {

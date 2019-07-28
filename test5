@@ -1,10 +1,10 @@
 pipeline {
-        
+        agent any
 	  environment {
-      DOCKER = credentials('private-docker')
+      SAUCE_ACCESS = credentials('private-docker')
         }
      
-        agent any
+        
         stages {
                  stage (build) {
 	                    agent {

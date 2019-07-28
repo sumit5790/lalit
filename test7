@@ -1,35 +1,30 @@
-pipeline {
-        agent none
-        stages{
-		    stage('build'){
-			        agent {
-                              docker {
-							image '172.31.30.63:5000/maven'
-							label 'docker'
-								registryUrl 'https://172.31.30.63:5000'
-							registryCredentialsId 'private-docker'
-							args '-v /root/.m2:/root/.m2'
-							}
-						}   
-			
-				}
-				steps{
-						sh 'mvn -B -DskipTests clean package'
-						sh 'mvn test'
-				}		
-           stage('dockerbuild'){
+pipeline{
+       agent { label 'docker' }
+	   environment {
+        SAUCE_ACCESS = credentials('private-docker')
 		
-		                       agent {
-										dockerfile {
-											filename './Dockerfile'
-											dir 'build'
-												label 'dockerfile'
-												registryUrl 'https://172.31.30.63:5000'
-											registryCredentialsId 'private-docker'
-												}
-										}
-		  }		
-
-
 		}
-		}
+		
+		stages {
+        stage('Build') {
+            steps {
+                // Print all the environment variables.
+                sh 'printenv'
+                sh 'echo $GIT_BRANCH'
+                sh 'echo $GIT_COMMIT'
+                echo 'Install non-dev composer packages and test a symfony cache clear'
+                sh 'docker build -f Dockerfile -t 172.31.30.63:5000:$GIT_COMMIT .'
+            }
+        }
+
+		stage('Push') {
+            when {
+                branch 'master'
+            }
+            steps {
+                echo 'Deploying docker images'
+                sh 'docker push 172.31.30.63:5000:$GIT_COMMIT:latest'
+            }
+        }
+    }
+}

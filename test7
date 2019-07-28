@@ -13,7 +13,7 @@ pipeline{
                 sh 'echo $GIT_BRANCH'
                 sh 'echo $GIT_COMMIT'
                 echo 'Install non-dev composer packages and test a symfony cache clear'
-                sh 'docker build  -t 172.31.30.63:5000:$GIT_COMMIT . '
+                sh 'docker build -f $(pwd)/Dockerfile -t 172.31.30.63:5000:$GIT_COMMIT .'
             }
         }
 
@@ -23,7 +23,8 @@ pipeline{
             }
             steps {
                 echo 'Deploying docker images'
-                sh 'docker push 172.31.30.63:5000:$GIT_COMMIT:latest'
+		sh 'docker tag 172.31.30.63:5000:$GIT_COMMIT 172.31.30.63:5000/new_image '
+                sh 'docker push 172.31.30.63:5000/new_image:latest'
             }
         }
     }

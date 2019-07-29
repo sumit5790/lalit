@@ -1,8 +1,6 @@
 pipeline {
         agent any
-	  environment {
-      registry = "172.31.30.63:5000"
-    registryCredential = 'private-docker'
+	 
         }
      
         
@@ -37,7 +35,7 @@ pipeline {
         stage('Deliver') {
             steps {
                 sh 'mvn -version'
-		sh 'echo "singh" > docker login  sumit@172.31.30.63:5000 '
+		sh 'echo "singh" > docker login  sumit@172.31.30.63:5000'
 		
             }
         }

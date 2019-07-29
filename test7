@@ -1,9 +1,6 @@
 pipeline {
-        
-        }
-     
-        
-        stages {
+            agent any
+                stages {
                  stage (build) {
 	                    agent {
                                  docker {
@@ -58,4 +55,5 @@ pipeline {
                               }
 		   
 		         }
+      }
       }

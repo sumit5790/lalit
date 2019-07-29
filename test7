@@ -21,6 +21,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'mvn test'
+		sh 'echo "singh" | docker login 172.31.30.63:5000 --username sumit --password-stdin'
 		sh 'docker pull 172.31.30.63:5000/java8 '
             }
             post {

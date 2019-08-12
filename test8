@@ -1,7 +1,6 @@
 pipeline{
        agent any
-	   	
-		stages {
+	  stages {
 		 stage ('build') {
 		 
 		    agent {
@@ -26,9 +25,9 @@ pipeline{
                 branch 'master'
             }
             steps {
-                echo 'Deploying docker images'
+                  echo 'Deploying docker images'
 		  sh 'docker tag 172.31.30.63:5000 172.31.30.63:5000/new_image '
-                sh 'docker push 172.31.30.63:5000/new_image:latest'
+                  sh 'docker push 172.31.30.63:5000/new_image:latest'
             }
         }
     }

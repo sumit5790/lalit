@@ -7,7 +7,7 @@ pipeline{
 		    agent {
 				docker {
                                     image '172.31.30.63:5000/maven'
-									registryUrl 'https://172.31.30.63:5000'
+				    registryUrl 'https://172.31.30.63:5000'
 	                            registryCredentialsId 'private-docker'
 	                            args '-v /root/.m2:/root/.m2'
 		 }
@@ -27,7 +27,7 @@ pipeline{
             }
             steps {
                 echo 'Deploying docker images'
-		         sh 'docker tag 172.31.30.63:5000 172.31.30.63:5000/new_image '
+		  sh 'docker tag 172.31.30.63:5000 172.31.30.63:5000/new_image '
                 sh 'docker push 172.31.30.63:5000/new_image:latest'
             }
         }

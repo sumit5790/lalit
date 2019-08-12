@@ -25,9 +25,7 @@ pipeline{
         }
 
 		stage('Push') {
-            when {
-                branch 'master'
-            }
+        
             steps {
                   echo 'Deploying docker images'
 		  sh 'docker tag 172.31.30.63:5000 172.31.30.63:5000/new_image '

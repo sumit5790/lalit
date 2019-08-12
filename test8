@@ -27,8 +27,8 @@ pipeline{
 		stage('Push') {
         
             steps {
-                  echo 'Deploying docker images'
-		  sh 'docker tag 172.31.30.63:5000/images:latest 172.31.30.63:5000/new_image '
+                  echo 'Deploying docker image'
+		  sh 'docker tag 172.31.30.63:5000/image:latest 172.31.30.63:5000/new_image '
                   sh 'docker push 172.31.30.63:5000/new_image:latest'
             }
         }
